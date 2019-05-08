@@ -43,20 +43,49 @@ class SQL:
         x = table.insert_one(mydict)
         return x.inserted_id
 
-    def get_info(self, info_id, user_id):
+    def get_info_all(self):
+        table = self.mydb['info']
+        res = []
+        for i in table.find({}):
+            temp = str(i['_id']).replace('ObjectId(', '').replace(')', '')
+            i['_id'] = temp
+            res.append(i)
+        res = {
+            "type": "get_info_all",
+            "res": res
+        }
+        print(res)
+        return res
 
-        info_id = ObjectId(info_id)
+    def get_info_like(self, user_id_):
+        table = self.mydb['info']
+        user_id = ObjectId(user_id_)
+        res = []
+        for item in self.get_info_all()["res"]:
+            if user_id_ in item['star']:
+                res.append(item)
+        res = {
+            "type": "get_users_like",
+            "user": user_id_,
+            "res": res
+        }
+        print(res)
+        return res
 
-        user_id = ObjectId(user_id)
+    def get_info_one(self, info_id_, user_id_):
+
+        info_id = ObjectId(info_id_)
+
+        user_id = ObjectId(user_id_)
         table = self.mydb['info']
         temp = table.find_one({'_id': info_id})
         print('get_info', temp)
         star = 0
         print(temp)
-        if user_id in temp['star']:
+        if user_id_ in temp['star']:
             star = 1
         return {
-            "_id": info_id,
+            "_id": info_id_,
             "image": temp['image'],
             "title": temp['title'],
             "info": temp['info'],
@@ -64,23 +93,21 @@ class SQL:
             "star": star
         }
 
-    def star(self, info_id, user_id):
+    def star(self, info_id_, user_id_):
 
-        info_id = ObjectId(info_id)
-
-        user_id = ObjectId(user_id)
+        info_id = ObjectId(info_id_)
 
         table = self.mydb['info']
         temp = table.find_one({'_id': info_id})
         print('atar', temp['star'])
         temp = list(temp['star'])
-        if user_id in temp:
-            temp.remove(user_id)
+        if user_id_ in temp:
+            temp.remove(user_id_)
             print(temp)
             f = table.update_one({'_id': info_id}, {'$set': {'star': temp}})
             return {"type": "star", "state": "0"}
         else:
-            temp.append(user_id)
+            temp.append(user_id_)
             print(temp)
             f = table.update_one({'_id': info_id}, {'$set': {'star': temp}})
             return {"type": "star", "state": "1"}
@@ -88,8 +115,8 @@ class SQL:
 
 if __name__ == '__main__':
     temp = SQL()
-    print(temp.reg('admin', 'admin'))
-    print(temp.login('admin', 'admin'))
+    # print(temp.reg('admin', 'admin'))
+    # print(temp.login('admin', 'admin'))
     # print(temp.new_info(
     #     'https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=78c401b9afc27d1eb12b33967abcc60b/21a4462309f7905234d9f42307f3d7ca7acbd5ed.jpg',
     #     '云南菜', '滇菜即云南菜，是中国菜体系中民族特色最为突出的一个地方性菜系。', "## 特色菜点：\n" +
@@ -111,5 +138,7 @@ if __name__ == '__main__':
     #                                               "云南的25个少数民族，每个民族都有各自独特的传统习俗以及饮食文化，种独特的资源。滇菜在形成过程中，将各少数民族的民族风俗、饮食习惯、烹调方法、独特口味、人文历史和特有的生态资源进行了有机融合和创新，形成了滇菜独有的历史、人文、民族风情和自然特色。这种蕴藏的几千年深厚的历史风貌、民族精神和文化底蕴，已经成为滇菜发展的一大支撑点和闪光点，而且无可替代。因此与其他菜系不同的是，滇菜是具有鲜明的多民族菜系特色、又具有突出地方菜系特点的菜种，其造型、色泽、烹饪方法、香味及滋补功效别具一格，体现在食材丰富、饮食风俗多彩、烹调方法多样、口味独特多变等方面。\n" +
     #                                               "* 多格局的乡土筵席\n" +
     #                                               "筵席是烹调工艺的集中反映和名菜名点的汇展橱窗，所以具有不同格局、风味各异的乡土筵席，是评判和区分菜系的一项具体指标。早在清朝光绪年间，昆明已形成了“三冷荤、四热吃、四座碗、八小碗、十二围碟”的旧式筵席及“十大件”的新式筵席，风味独特 [5]  。形成了形式多样各具特色的不同种类和档次的滇味筵席，如1999年世博会的开幕国宴———“吉鑫宴舞”，是由筵席与歌舞相组成。其中除了看家菜过桥米线外，还将云南哈尼族的长街宴、傣族的迎亲酒、纳西族三叠水、彝族的砣子肉等都融会于吉鑫宴舞的筵席中。一次吉鑫宴舞，就可以尝遍云南美食，并且将云南多个民族的民族文化和民俗风情都融会于宴舞之中。其他具有民族饮食文化又与现代餐饮时尚相结合的大理白族风情宴、楚雄彝王宴、德宏土司宴、哈尼长街宴、云南山珍宴、鸡枞全席等，都是滇菜中富有浓郁乡土气息的知名筵席。哈尼族长街宴曾到北京摆出千道滇菜，创造了上海吉尼斯纪录，为昆明荣获中国首座“中华美食名城”增添了亮点。"))
-    # print(temp.star('5cd2d516db468ac6fbde8c6e', '5cd2a251f9c23996741bdb12'))
-    print(temp.get_info('5cd2d516db468ac6fbde8c6e', '5cd2a251f9c23996741bdb12'))
+    # print(temp.star('5cd30e712fa5d21df8d2f7ed', '5cd2a251f9c23996741bdb12'))
+    # print(temp.get_info_one('5cd2d516db468ac6fbde8c6e', '5cd2a251f9c23996741bdb12'))
+    # temp.get_info_like('5cd2a251f9c23996741bdb12')
+    temp.get_info_all()

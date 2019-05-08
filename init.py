@@ -5,7 +5,9 @@
 # @Site : 
 # @File : init.py
 # @Software: PyCharm
-from flask import Flask, request, jsonify
+import json
+
+from flask import Flask, request, Response
 
 from sql import SQL
 
@@ -30,7 +32,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         res = sqlManager.login(username, password)
-        return jsonify(res)
+        return Response(json.dumps(res), mimetype='application/json')
 
 
 @app.route('/star', methods=['POST'])
@@ -39,8 +41,38 @@ def star():
         info_id = request.form['info_id']
         user_id = request.form['user_id']
         res = sqlManager.star(info_id, user_id)
-        return jsonify(res)
+        return Response(json.dumps(res), mimetype='application/json')
+
+
+@app.route('/get_users_like', methods=['POST'])
+def get_users_like():
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        res = sqlManager.get_info_like(user_id)
+        print(res)
+        return Response(json.dumps(res), mimetype='application/json')
+
+
+@app.route('/get_info_all', methods=['POST'])
+def get_info_all():
+    if request.method == 'POST':
+        res = sqlManager.get_info_all()
+        print(res)
+        return Response(json.dumps(res), mimetype='application/json')
+
+
+@app.route('/get_info_one', methods=['POST'])
+def get_info_one():
+    if request.method == 'POST':
+        info_id = request.form['info_id']
+        user_id = request.form['user_id']
+
+        res = sqlManager.get_info_one(info_id, user_id)
+        print(res)
+        return Response(json.dumps(res), mimetype='application/json')
+
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+    # print(get_info_all())
