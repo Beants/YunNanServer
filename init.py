@@ -72,6 +72,25 @@ def get_info_one():
         return Response(json.dumps(res), mimetype='application/json')
 
 
+@app.route('/get_info_type', methods=['POST'])
+def get_info_type():
+    if request.method == 'POST':
+        type_ = request.form['type']
+
+        res = sqlManager.get_info_type(type_)
+        print(res)
+        return Response(json.dumps(res), mimetype='application/json')
+
+
+@app.route('/get_info_key', methods=['POST'])
+def get_info_type():
+    if request.method == 'POST':
+        key = request.form['key']
+
+        res = sqlManager.search_by_key(key)
+        print(res)
+        return Response(json.dumps(res), mimetype='application/json')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
