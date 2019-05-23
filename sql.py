@@ -56,7 +56,7 @@ class SQL:
             "type": "get_info_all",
             "res": res
         }
-        print(res)
+        # print(res)
         return res
 
     def get_info_like(self, user_id_):
@@ -71,7 +71,7 @@ class SQL:
             "user": user_id_,
             "res": res
         }
-        print(res)
+        # print(res)
         return res
 
     def get_info_type(self, type_):
@@ -96,9 +96,9 @@ class SQL:
         user_id = ObjectId(user_id_)
         table = self.mydb['info']
         temp = table.find_one({'_id': info_id})
-        print('get_info', temp)
+        # print('get_info', temp)
         star = 0
-        print(temp)
+        # print(temp)
         if user_id_ in temp['star']:
             star = 1
         return {
@@ -117,7 +117,7 @@ class SQL:
 
         table = self.mydb['info']
         temp = table.find_one({'_id': info_id})
-        print('atar', temp['star'])
+        # print('atar', temp['star'])
         temp = list(temp['star'])
         if user_id_ in temp:
             temp.remove(user_id_)
