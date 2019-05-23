@@ -7,7 +7,9 @@
 # @Software: PyCharm
 from bson import ObjectId
 
-
+import sys
+import codecs
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 class SQL:
     def __init__(self):
 

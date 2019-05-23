@@ -5,11 +5,15 @@
 # @Site : 
 # @File : init.py
 # @Software: PyCharm
+import codecs
 import json
+import sys
 
 from flask import Flask, request, Response
 
 from sql import SQL
+
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 app = Flask(__name__)
 sqlManager = SQL()
