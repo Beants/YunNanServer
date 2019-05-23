@@ -83,7 +83,7 @@ def get_info_type():
 
 
 @app.route('/get_info_key', methods=['POST'])
-def get_info_type():
+def get_info_key():
     if request.method == 'POST':
         key = request.form['key']
 
