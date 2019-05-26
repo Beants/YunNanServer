@@ -13,7 +13,7 @@ from flask import Flask, request, Response
 
 from sql import SQL
 
-sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+# sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 app = Flask(__name__)
 sqlManager = SQL()
@@ -90,7 +90,7 @@ def get_info_type():
 def get_info_key():
     if request.method == 'POST':
         key = request.form['key']
-
+        print(key)
         res = sqlManager.search_by_key(key)
         print(res)
         return Response(json.dumps(res), mimetype='application/json')

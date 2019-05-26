@@ -5,10 +5,11 @@
 # @Site : 
 # @File : sql.py
 # @Software: PyCharm
+import codecs
+import sys
+
 from bson import ObjectId
 
-import sys
-import codecs
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 class SQL:
     def __init__(self):
@@ -61,7 +62,7 @@ class SQL:
 
     def get_info_like(self, user_id_):
         table = self.mydb['info']
-        user_id = ObjectId(user_id_)
+        user_id = str(user_id_).replace('ObjectId(', '').replace(')', '')
         res = []
         for item in self.get_info_all()["res"]:
             if user_id_ in item['star']:
@@ -132,10 +133,11 @@ class SQL:
 
     def search_by_key(self, title):
         table = self.mydb['info']
-
         res = []
+        print('table.find({})', table.find({}))
         for i in table.find({}):
-            if title in i['title'] or i in i['info'] or i in i['detail']:
+            print(i['image'], i['info'])
+            if title in i['image'] or title in i['info']:
                 temp = str(i['_id']).replace('ObjectId(', '').replace(')', '')
                 i['_id'] = temp
                 res.append(i)
