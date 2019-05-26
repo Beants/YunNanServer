@@ -41,7 +41,7 @@ import requests
 #5ce193e3c9a49cb81b562fe7
 
 # 测试get key
-data = {'key': '诗'}
-res = requests.post('http://127.0.0.1:5000/get_info_key', data=data)
+data = {'type': 1}
+res = requests.post('http://127.0.0.1:5000/get_info_type', data=data)
 print(res.text)
 # print(type(res))

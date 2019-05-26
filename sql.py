@@ -78,6 +78,7 @@ class SQL:
     def get_info_type(self, type_):
         table = self.mydb['info']
         res = []
+        type_ = int(type_)
 
         for item in table.find({"type": type_}):
             temp = str(item['_id']).replace('ObjectId(', '').replace(')', '')
@@ -154,4 +155,4 @@ class SQL:
 if __name__ == '__main__':
     pass
     temp = SQL()
-    temp.get_info_all()
+    print(temp.get_info_type(1))
